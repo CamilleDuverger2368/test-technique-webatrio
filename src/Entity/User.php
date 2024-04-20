@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -18,10 +20,20 @@ class User
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "name can't be blanck")]
+    #[Assert\Length(min: 1, max: 255, minMessage: "your name must have between 1 and 255 characters", maxMessage: "your name must have between 1 and 255 characters")]
+    #[Assert\Regex(pattern: "/\d/", match: false, message: "Your name cannot contain a number")]
+    #[Assert\Type(type: "string", message: "{{ value }} is not a valid {{ type }}")]
+    #[Groups(["getCurentJob", "getEmployeesOf"])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $firtName = null;
+    #[Assert\NotBlank(message: "firstname can't be blanck")]
+    #[Assert\Length(min: 1, max: 255, minMessage: "your name must have between 1 and 255 characters", maxMessage: "your name must have between 1 and 255 characters")]
+    #[Assert\Regex(pattern: "/\d/", match: false, message: "Your name cannot contain a number")]
+    #[Assert\Type(type: "string", message: "{{ value }} is not a valid {{ type }}")]
+    #[Groups(["getCurentJob", "getEmployeesOf"])]
+    private ?string $firstName = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $birthdate = null;
@@ -54,14 +66,14 @@ class User
         return $this;
     }
 
-    public function getFirtName(): ?string
+    public function getfirstName(): ?string
     {
-        return $this->firtName;
+        return $this->firstName;
     }
 
-    public function setFirtName(string $firtName): static
+    public function setfirstName(string $firstName): static
     {
-        $this->firtName = $firtName;
+        $this->firstName = $firstName;
 
         return $this;
     }

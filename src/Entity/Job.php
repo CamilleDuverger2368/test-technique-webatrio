@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\JobRepository;
 use Doctrine\DBAL\Types\Types;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: JobRepository::class)]
@@ -15,16 +16,20 @@ class Job
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["getCurentJob", "getJobs"])]
     private ?string $position = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups(["getCurentJob", "getJobs"])]
     private ?\DateTimeInterface $startingDate = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[Groups(["getCurentJob", "getJobs"])]
     private ?\DateTimeInterface $endingDate = null;
 
     #[ORM\ManyToOne(inversedBy: 'jobs')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(["getCurentJob", "getJobs"])]
     private ?Entreprise $entreprise = null;
 
     #[ORM\ManyToOne(inversedBy: 'jobs')]

@@ -2,7 +2,9 @@
 
 namespace App\Repository;
 
+use App\Entity\Entreprise;
 use App\Entity\Job;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -21,28 +23,47 @@ class JobRepository extends ServiceEntityRepository
         parent::__construct($registry, Job::class);
     }
 
-    //    /**
-    //     * @return Job[] Returns an array of Job objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('j')
-    //            ->andWhere('j.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('j.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+       /**
+        * @return Job[]
+        */
+       public function findCurrentJobOf(User $user): array
+       {
+           return $this->createQueryBuilder('j')
+               ->andWhere("j.employee = :user")
+               ->andWhere("j.endingDate IS NULL")
+               ->setParameter("user", $user)
+               ->getQuery()
+               ->getResult()
+           ;
+       }
 
-    //    public function findOneBySomeField($value): ?Job
-    //    {
-    //        return $this->createQueryBuilder('j')
-    //            ->andWhere('j.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+       /**
+        * @return Job[]
+        */
+        public function findJobsFromTo(User $user, $from, $to): array
+        {
+            return $this->createQueryBuilder('j')
+                ->andWhere("j.employee = :user")
+                ->andWhere("j.startingDate BETWEEN :from AND :to")
+                ->andWhere("j.endingDate BETWEEN :from AND :to")
+                ->setParameter("user", $user)
+                ->setParameter("from", $from)
+                ->setParameter("to", $to)
+                ->getQuery()
+                ->getResult()
+            ;
+        }
+
+       /**
+        * @return Job[]
+        */
+       public function findEmployeesOf(Entreprise $entreprise): array
+       {
+           return $this->createQueryBuilder('j')
+               ->andWhere("j.entreprise = :entreprise")
+               ->setParameter("entreprise", $entreprise)
+               ->getQuery()
+               ->getResult()
+           ;
+       }
 }

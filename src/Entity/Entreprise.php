@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\EntrepriseRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EntrepriseRepository::class)]
@@ -16,6 +17,7 @@ class Entreprise
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["getCurentJob", "getJobs"])]
     private ?string $name = null;
 
     /**
